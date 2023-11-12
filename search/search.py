@@ -85,10 +85,19 @@ def depthFirstSearch(problem):
     print("Start:", problem.getStartState())
     print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
-    """
+    util.raiseNotDefined()"""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    fringe = util.Stack.__init__()
+    closed = [,]
+    fringe.push(problem.getStartState())
+    while fringe.isEmpty() == false:
+       node = fringe[0]
+       fringe.pop()   
+    if problem.isGoalState(node):
+       
+        
 
+    
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
