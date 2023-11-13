@@ -87,21 +87,48 @@ def depthFirstSearch(problem):
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     util.raiseNotDefined()"""
     "*** YOUR CODE HERE ***"
-    fringe = util.Stack.__init__()
-    closed = [,]
-    fringe.push(problem.getStartState())
-    while fringe.isEmpty() == false:
-       node = fringe[0]
-       fringe.pop()   
-    if problem.isGoalState(node):
-       
-        
-
+    from game import Directions
+    fringe = util.Stack()
+    closed = []
+    start = (problem.getStartState(),[])
+    fringe.push(start)
+    while fringe.isEmpty() == False:
+        position,action = fringe.pop()
+        if problem.isGoalState(position):
+            return action
+        if position not in closed:
+            closed.append(position)
+            successors = problem.getSuccessors(position)
+            for successor in successors:
+                succIterator = iter(successor)
+                position = next(succIterator)
+                nextAction = action + [next(succIterator)]
+                succ = (position, nextAction)
+                fringe.push(succ)
+    return action
     
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    from game import Directions
+    fringe = util.Queue()
+    closed = []
+    start = (problem.getStartState(),[])
+    fringe.push(start)
+    while fringe.isEmpty() == False:
+        position,action = fringe.pop()
+        if problem.isGoalState(position):
+            return action
+        if position not in closed:
+            closed.append(position)
+            successors = problem.getSuccessors(position)
+            for successor in successors:
+                succIterator = iter(successor)
+                position = next(succIterator)
+                nextAction = action + [next(succIterator)]
+                succ = (position, nextAction)
+                fringe.push(succ)
+    return action
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
