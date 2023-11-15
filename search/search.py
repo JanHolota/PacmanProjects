@@ -89,15 +89,14 @@ def depthFirstSearch(problem):
     "*** YOUR CODE HERE ***"
     from game import Directions
     fringe = util.Stack()
-    closed = []
-    start = (problem.getStartState(),[])
-    fringe.push(start)
+    closed = set()
+    fringe.push((problem.getStartState(),[]))
     while fringe.isEmpty() == False:
         position,action = fringe.pop()
         if problem.isGoalState(position):
             return action
         if position not in closed:
-            closed.append(position)
+            closed.add(position)
             successors = problem.getSuccessors(position)
             for successor in successors:
                 succIterator = iter(successor)
@@ -112,7 +111,7 @@ def breadthFirstSearch(problem):
     "*** YOUR CODE HERE ***"
     from game import Directions
     fringe = util.Queue()
-    closed = []
+    closed = set()
     start = (problem.getStartState(),[])
     fringe.push(start)
     while fringe.isEmpty() == False:
@@ -120,7 +119,7 @@ def breadthFirstSearch(problem):
         if problem.isGoalState(position):
             return action
         if position not in closed:
-            closed.append(position)
+            closed.add(position)
             successors = problem.getSuccessors(position)
             for successor in successors:
                 succIterator = iter(successor)
