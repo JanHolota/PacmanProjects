@@ -132,7 +132,29 @@ def breadthFirstSearch(problem):
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    from game import Directions
+    fringe = util.PriorityQueue()
+    closed = set()
+    fringe.push((problem.getStartState(),[],0),0)
+    while fringe.isEmpty() == False:
+        item = fringe.pop()
+        iterItem = iter(item)
+        position = next(iterItem)
+        action = next(iterItem)
+        cost = next(iterItem)
+        if problem.isGoalState(position):
+            return action
+        if position not in closed:
+            closed.add(position)
+            successors = problem.getSuccessors(position)
+            for successor in successors:
+                succIterator = iter(successor)
+                position = next(succIterator)
+                nextAction = action + [next(succIterator)]
+                nextCost = cost + next(succIterator)
+                fringe.update((position,nextAction,nextCost),nextCost)
+    return action
+
 
 def nullHeuristic(state, problem=None):
     """
@@ -144,8 +166,8 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
 
+    util.raiseNotDefined()
 
 # Abbreviations
 bfs = breadthFirstSearch
