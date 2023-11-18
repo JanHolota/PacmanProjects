@@ -87,73 +87,70 @@ def depthFirstSearch(problem):
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     util.raiseNotDefined()"""
     "*** YOUR CODE HERE ***"
-    from game import Directions
-    fringe = util.Stack()
-    closed = set()
-    fringe.push((problem.getStartState(),[]))
-    while fringe.isEmpty() == False:
-        position,action = fringe.pop()
-        if problem.isGoalState(position):
-            return action
-        if position not in closed:
-            closed.add(position)
-            successors = problem.getSuccessors(position)
-            for successor in successors:
-                succIterator = iter(successor)
-                position = next(succIterator)
-                nextAction = action + [next(succIterator)]
-                succ = (position, nextAction)
-                fringe.push(succ)
-    return action
+    fringe = util.Stack() ## prohledávání do hloubky využívá zásobík (LIFO)
+    closed = set() ## pro ukládání rozvinutých stavů používám set, pro jeho dobré vlastnosti při testování, zda je něco prvkem setu (složitost O(1))
+    fringe.push((problem.getStartState(),[])) ## přidání počátečního stavu do fringe (stav, akce vedoucí do tohoto stavu)
+    while fringe.isEmpty() == False: ## cyklus trvá dokud není fringe prázdná
+        position,action = fringe.pop() ## vezmu si z fringe stav(pozici) a akce vedoucí do stavu
+        if problem.isGoalState(position): ## otestuji, zda je stav cílovým stavem
+            return action ## pokud je cílovým stavem, vrátím list s akcemi vedoucími do stavu
+        if position not in closed: ## jestliže není cílovým stavem kontrola, zda už není v closed (pokud by byl, jdu na další stav ve fringe)
+            closed.add(position) ## přidám do closed
+            successors = problem.getSuccessors(position) ## uložím si následníky
+            for successor in successors: ## přes všechny následníky
+                succIterator = iter(successor) ## zakládám iterátor přes set (successor je set)
+                position = next(succIterator) ## prvním prvkem je stav
+                nextAction = action + [next(succIterator)] ## druhým prvkem je akce nutná k dostání se do tohoto stavu. K ní přičtu akce všech předků
+                succ = (position, nextAction) ## složím potomka pro přidání do fringe
+                fringe.push(succ) ## přidám potomka do fringe
+    return action ## vracím akce do posledního navštíveného uzlu, pokud nenajdu cíl
+
     
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    from game import Directions
-    fringe = util.Queue()
-    closed = set()
-    start = (problem.getStartState(),[])
-    fringe.push(start)
-    while fringe.isEmpty() == False:
-        position,action = fringe.pop()
-        if problem.isGoalState(position):
-            return action
-        if position not in closed:
-            closed.add(position)
-            successors = problem.getSuccessors(position)
-            for successor in successors:
-                succIterator = iter(successor)
-                position = next(succIterator)
-                nextAction = action + [next(succIterator)]
-                succ = (position, nextAction)
-                fringe.push(succ)
-    return action
+    fringe = util.Queue() ## prohledávání do šířky využívá frontu (FIFO)
+    closed = set() ## pro ukládání rozvinutých stavů používám set, pro jeho dobré vlastnosti při testování, zda je něco prvkem setu (složitost O(1))
+    fringe.push((problem.getStartState(),[])) ## přidání počátečního stavu do fringe (stav, akce vedoucí do tohoto stavu)
+    while fringe.isEmpty() == False: ## cyklus trvá dokud není fringe prázdná
+        position,action = fringe.pop() ## vezmu si z fringe stav(pozici) a akce vedoucí do stavu
+        if problem.isGoalState(position): ## otestuji, zda je stav cílovým stavem
+            return action ## pokud je cílovým stavem, vrátím list s akcemi vedoucími do stavu
+        if position not in closed: ## jestliže není cílovým stavem kontrola, zda už není v closed (pokud by byl, jdu na další stav ve fringe)
+            closed.add(position) ## přidám do closed
+            successors = problem.getSuccessors(position) ## uložím si následníky
+            for successor in successors:  ## přes všechny následníky
+                succIterator = iter(successor)  ## zakládám iterátor přes set (successor je set)
+                position = next(succIterator) ## prvním prvkem je stav
+                nextAction = action + [next(succIterator)] ## druhým prvkem je akce nutná k dostání se do tohoto stavu. K ní přičtu akce všech předků
+                succ = (position, nextAction)  ## složím potomka pro přidání do fringe
+                fringe.push(succ) ## přidám potomka do fringe
+    return action ## vracím akce do posledního navštíveného uzlu, pokud nenajdu cíl
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    from game import Directions
-    fringe = util.PriorityQueue()
-    closed = set()
-    fringe.push((problem.getStartState(),[],0),0)
-    while fringe.isEmpty() == False:
-        item = fringe.pop()
-        iterItem = iter(item)
-        position = next(iterItem)
-        action = next(iterItem)
-        cost = next(iterItem)
-        if problem.isGoalState(position):
-            return action
-        if position not in closed:
-            closed.add(position)
-            successors = problem.getSuccessors(position)
-            for successor in successors:
-                succIterator = iter(successor)
-                position = next(succIterator)
-                nextAction = action + [next(succIterator)]
-                nextCost = cost + next(succIterator)
-                fringe.update((position,nextAction,nextCost),nextCost)
-    return action
+    fringe = util.PriorityQueue() ## je potřeba prvky ve fringe řadit dle ceny
+    closed = set() ## pro ukládání rozvinutých stavů používám set, pro jeho dobré vlastnosti při test ování, zda je něco prvkem setu (složitost O(1)).
+    fringe.push((problem.getStartState(),[],0),0) ## přidání počátečního stavu do fringe (stav, akce vedoucí do tohoto stavu,cena), cena. Dvakrát vkládám cenu, protože cema mimo set bude použita k řazení
+    while fringe.isEmpty() == False: ## cyklus trvá dokud není fringe prázdná
+        item = fringe.pop() ## vezmu si fringe prvek
+        iterItem = iter(item) ## založím si iterátor na prvku z fringe
+        position = next(iterItem)  ## vezmu si pozici
+        action = next(iterItem) ## vezmu si akce
+        cost = next(iterItem) ## vezmu si cenu prvku
+        if problem.isGoalState(position): ## otestuji, zda je stav cílovým stavem
+            return action ## vrátím akce do tohoto stavu
+        if position not in closed: ## otestuji, zda není v closed
+            closed.add(position) ## přidám do closed
+            successors = problem.getSuccessors(position) ## uložím si následníky
+            for successor in successors: ## přes všechny následníky
+                succIterator = iter(successor) ## zakládám iterátor přes set (successor je set)
+                position = next(succIterator) ## prvním prvkem je stav
+                nextAction = action + [next(succIterator)] ## druhým prvkem je akce nutná k dostání se do stavu a přičtu akce všech předků
+                nextCost = cost + next(succIterator) ## připočítám cenu předka s cenou následníka
+                fringe.update((position,nextAction,nextCost),nextCost) ## použiju update (přepočítá fringe a seřadí)
+    return action ## vracím akce do posledního navštíveného uzlu, pokud nenajdu cíl
 
 
 def nullHeuristic(state, problem=None):

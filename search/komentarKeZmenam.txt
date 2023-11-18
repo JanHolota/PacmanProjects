@@ -1,0 +1,4 @@
+Veškeré změny týkající se algoritmů jsou v souboru search.py a jsou okomentovány přímo v kódu.
+
+Řešení jsem dělal v Pythonu 3.10.7 a nefungoval mi modul cgi (funkce escape()) v souboru grading.py
+Tento soubor se používá při autogradingu řešení. Pro Python verze 3.2 a vyšší je tato funkce v modulu html, tudíž jsem ho naimportoval a funkci volám z tohoto modulu. S touto úpravou mi autograder funguje.
